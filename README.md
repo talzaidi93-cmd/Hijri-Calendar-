@@ -1,4 +1,4 @@
-# التقويم الهجري الجعفري — self-updating calendar feed
+# التقويم الهجري الجعفري — Self-Updating Calendar feed
 
 A Hijri date calendar for Google Calendar, anchored to the official date
 published by the office of Grand Ayatollah al-Sistani in Najaf. Arabic month

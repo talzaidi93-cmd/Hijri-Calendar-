@@ -1,0 +1,43 @@
+name: Update Hijri feed
+
+on:
+  schedule:
+    - cron: "0 2,19 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hijri-feed
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install requests hijridate
+
+      - name: Generate feed
+        run: python generate.py
+
+      - name: Commit if anything changed
+        run: |
+          git config user.name  "hijri-feed-bot"
+          git config user.email "actions@github.com"
+          git add hijri.ics anchors.json
+          if git diff --staged --quiet; then
+            echo "No change."
+          else
+            git commit -m "Update Hijri feed — $(date -u +%Y-%m-%d)"
+            git push
+          fi
